@@ -19,7 +19,6 @@
                 <th scope="col">#</th>
                 <th scope="col">Tarefa</th>
                 <th scope="col">Deletar</th>
-                {{-- <th scope="col">Alterar</th> --}}
             </tr>
         </thead>
         <tbody>
