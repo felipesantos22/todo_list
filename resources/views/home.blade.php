@@ -34,9 +34,6 @@
                             <button type="submit" class="btn btn-outline-danger">Deletar</button>
                         </form>
                     </td>
-                    {{-- <td>
-                        <button type="button" class="btn btn-outline-secondary">Alterar</button>
-                    </td> --}}
                 </tr>
             @endforeach
     </table>
