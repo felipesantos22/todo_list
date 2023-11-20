@@ -25,7 +25,7 @@
         <tbody>
             @foreach ($tasks as $task)
                 <tr>
-                    <td class="col-md-2">#</td>
+                    <td class="col-md-2">{{ $loop->iteration }}</td>
                     <td class="col-md-8">{{ $task->taskName }}</td>
                     <td class="col-md-8">
                         <form action="{{ url("/$task->id") }}" method="POST">
@@ -49,8 +49,8 @@
         <button type="submit" class="btn btn-dark">Criar tarefa</button>
     </form>
 
-    
-        {{-- {{ $tasks->links() }} --}}
+
+    {{-- {{ $tasks->links() }} --}}
 
 
 </body>
