@@ -32,7 +32,7 @@ class TaskController extends Controller
     //Api
     public function indexWeb()
     {
-        $tasks = Task::paginate(20);
+        $tasks = Task::all();
         return view('home', ['tasks' => $tasks]);
     }
 
