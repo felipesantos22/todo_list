@@ -18,7 +18,7 @@ class TaskController extends Controller
     //Web
     public function createWeb(Request $request)
     {
-        $task = Task::create($request->all());
+        Task::create($request->all());
         return redirect('/');
     }
 
@@ -38,18 +38,31 @@ class TaskController extends Controller
 
     public function destroyWeb($id)
     {
-        $task = Task::findOrFail($id);
-        $delteTask = $task->delete();
+        $tasks = Task::findOrFail($id);
+        $tasks->delete();
         return redirect('/');
     }
 
     public function destroyApi($id)
     {
-        $users = User::find($id);
-        if (!$users) {
+        $task = Task::find($id);
+        if (!$task) {
             return response()->json(['message' => 'User not found'], 404);
         }
-        $users->delete();
+        $task->delete();
         return response()->json(['message' => 'User excluído com sucesso']);
+    }
+
+    public function showWeb($id)
+    {
+        $task = Task::find($id);
+        return view('edit', compact('task'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $task = Task::findOrFail($id);
+        $task->update($request->all());
+        return redirect('/')->with('success', 'Tarefa atualizada com sucesso!');
     }
 }
