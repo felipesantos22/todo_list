@@ -16,4 +16,9 @@ class Task extends Model
     ];
 
     public $timestamps = true;
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

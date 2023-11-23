@@ -16,11 +16,9 @@ class TaskController extends Controller
         if ($existingTask) {
             return response()->json(['message' => 'Tarefa já existe'], 404);
         }
-
         $task = Task::create($data);
-        return response()->json($task, 201); 
+        return response()->json($task, 201);
     }
-    
 
     //Web
     public function createWeb(Request $request)
@@ -77,14 +75,14 @@ class TaskController extends Controller
         return redirect('/')->with('success', 'Tarefa atualizada com sucesso!');
     }
 
-     //Api
-     public function updateApi(Request $request, $id)
-     {
-         $task = Task::findOrFail($id);
-         if(!$task){
+    //Api
+    public function updateApi(Request $request, $id)
+    {
+        $task = Task::findOrFail($id);
+        if (!$task) {
             return response()->json(['message' => 'Task não encontrada!']);
-         }
-         $task->update($request->all());
-         return response()->json(['message' => 'Task atualizada com sucesso!']);
-     }
+        }
+        $task->update($request->all());
+        return response()->json(['message' => 'Task atualizada com sucesso!']);
+    }
 }
