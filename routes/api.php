@@ -21,3 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/task/create', [TaskController::class, 'create']);
 Route::get('/task', [TaskController::class, 'index']);
+Route::put('/task/{id}', [TaskController::class, 'updateApi']);
+Route::delete('/task/{id}', [TaskController::class, 'destroyApi']);

@@ -11,9 +11,16 @@ class TaskController extends Controller
     //Api
     public function create(Request $request)
     {
-        $task = Task::create($request->all());
-        return $task;
+        $data = $request->all();
+        $existingTask = Task::where('taskName', $data['taskName'])->first();
+        if ($existingTask) {
+            return response()->json(['message' => 'Tarefa já existe'], 404);
+        }
+
+        $task = Task::create($data);
+        return response()->json($task, 201); 
     }
+    
 
     //Web
     public function createWeb(Request $request)
@@ -25,7 +32,7 @@ class TaskController extends Controller
     //Api
     public function index()
     {
-        $task = Task::paginate(3);
+        $task = Task::all();
         return $task;
     }
 
@@ -36,6 +43,7 @@ class TaskController extends Controller
         return view('home', ['tasks' => $tasks]);
     }
 
+    //Web
     public function destroyWeb($id)
     {
         $tasks = Task::findOrFail($id);
@@ -43,6 +51,7 @@ class TaskController extends Controller
         return redirect('/');
     }
 
+    //Api
     public function destroyApi($id)
     {
         $task = Task::find($id);
@@ -53,16 +62,29 @@ class TaskController extends Controller
         return response()->json(['message' => 'User excluído com sucesso']);
     }
 
+    //Web
     public function showWeb($id)
     {
         $task = Task::find($id);
         return view('edit', compact('task'));
     }
 
+    //Web
     public function update(Request $request, $id)
     {
         $task = Task::findOrFail($id);
         $task->update($request->all());
         return redirect('/')->with('success', 'Tarefa atualizada com sucesso!');
     }
+
+     //Api
+     public function updateApi(Request $request, $id)
+     {
+         $task = Task::findOrFail($id);
+         if(!$task){
+            return response()->json(['message' => 'Task não encontrada!']);
+         }
+         $task->update($request->all());
+         return response()->json(['message' => 'Task atualizada com sucesso!']);
+     }
 }
