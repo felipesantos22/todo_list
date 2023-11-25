@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -11,14 +12,36 @@ class TaskController extends Controller
     //Api
     public function create(Request $request)
     {
-        $data = $request->all();
-        $existingTask = Task::where('taskName', $data['taskName'])->first();
-        if ($existingTask) {
-            return response()->json(['message' => 'Tarefa já existe'], 404);
+        try {
+            $data = $request->all();
+
+            // Verifica se o user_id está presente e não está vazio
+            if (empty($data['user_id'])) {
+                return response()->json(['message' => 'O campo user_id é obrigatório!'], 400);
+            }
+
+            // Verifica se o usuário com o id fornecido existe
+            $existingUser = User::find($data['user_id']);
+
+            if (!$existingUser) {
+                return response()->json(['message' => 'Chave estrangeira não existe!'], 404);
+            }
+
+            $task = new Task([
+                'taskName' => $data['taskName'],
+            ]);
+
+            $existingUser->task()->save($task);
+
+            return response()->json($task, 201);
+        } catch (QueryException $e) {
+            return response()->json(['message' => 'Erro no banco de dados: ' . $e->getMessage()], 500);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Ocorreu um erro: ' . $e->getMessage()], 500);
         }
-        $task = Task::create($data);
-        return response()->json($task, 201);
     }
+
+
 
     //Web
     public function createWeb(Request $request)
