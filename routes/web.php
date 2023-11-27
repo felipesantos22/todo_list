@@ -20,7 +20,9 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [TaskController::class, 'indexWeb']);
-Route::get('/{id}', [TaskController::class, 'showWeb']);
-Route::put('//{id}', [TaskController::class, 'update']);
 Route::post('/', [TaskController::class, 'createWeb']);
+Route::get('/{id}', [TaskController::class, 'showWeb']);
+Route::get('/', [TaskController::class, 'showTaskweb']);
+Route::put('/{id}', [TaskController::class, 'update']);
 Route::delete('/{id}', [TaskController::class, 'destroyWeb']);
+

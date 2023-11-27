@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class TaskController extends Controller
 {
 
     //Api
-    public function create(Request $request)
+    public function createWithRelation(Request $request)
     {
         try {
             $data = $request->all();
@@ -19,18 +20,15 @@ class TaskController extends Controller
             if (empty($data['user_id'])) {
                 return response()->json(['message' => 'O campo user_id é obrigatório!'], 400);
             }
-
             // Verifica se o usuário com o id fornecido existe
             $existingUser = User::find($data['user_id']);
 
             if (!$existingUser) {
                 return response()->json(['message' => 'Chave estrangeira não existe!'], 404);
             }
-
             $task = new Task([
                 'taskName' => $data['taskName'],
             ]);
-
             $existingUser->task()->save($task);
 
             return response()->json($task, 201);
@@ -41,6 +39,13 @@ class TaskController extends Controller
         }
     }
 
+
+    //Api
+    public function create(Request $request)
+    {
+        $task = Task::create($request->all());
+        return response()->json(['message' => 'Task criada com sucesso!', 'Task' => $task]);
+    }
 
 
     //Web
@@ -90,6 +95,16 @@ class TaskController extends Controller
         return view('edit', compact('task'));
     }
 
+    //Api
+    public function showApi($id)
+    {
+        $task = Task::find($id);
+        if (!$task) {
+            return response()->json(['message' => 'Task não encontrada!']);
+        }
+        return response()->json(['message' => 'Task encontrada!', 'Task' => $task]);
+    }
+
     //Web
     public function update(Request $request, $id)
     {
@@ -108,4 +123,24 @@ class TaskController extends Controller
         $task->update($request->all());
         return response()->json(['message' => 'Task atualizada com sucesso!']);
     }
+
+    //Api
+    public function showTask(Request $request)
+    {
+        try {
+            $task = $request->input('taskName');
+            $tasks = Task::where('taskName', 'like', "%$task%")->get();
+            return response()->json(['Task' => $tasks]);
+        } catch (ValidationException $e) {
+            return response()->json(['error' => 'O parâmetro "name" é obrigatório.'], 400);
+        }
+    }
+
+     //web
+     public function showTaskweb(Request $request)
+     {
+        $task = $request->input('taskName');
+        $tasks = Task::where('taskName', 'like', "%$task%")->get();
+        return view('home', compact('tasks'));
+     }
 }

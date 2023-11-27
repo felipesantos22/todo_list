@@ -29,6 +29,12 @@
             </tr>
         @endforeach
 </table>
+
+<form class="d-flex" role="search" action="/" method="GET">
+    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="taskName">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+
 <form action="{{ url('/') }}" method="POST">
     @csrf
     <div class="mb-3">

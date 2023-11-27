@@ -28,7 +28,10 @@ Route::get('/user', [UserController::class, 'indexApi']);
 
 
 //Task
-Route::post('/task/create', [TaskController::class, 'create']);
 Route::get('/task', [TaskController::class, 'index']);
+Route::post('/task', [TaskController::class, 'create']);
+Route::get('/task/search', [TaskController::class, 'showTask']);
+Route::get('/task/{id}', [TaskController::class, 'showApi']);
 Route::put('/task/{id}', [TaskController::class, 'updateApi']);
 Route::delete('/task/{id}', [TaskController::class, 'destroyApi']);
+
